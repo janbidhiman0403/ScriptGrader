@@ -1,0 +1,12 @@
+fastapi==0.141.1
+uvicorn[standard]==0.52.1
+anthropic==0.120.2
+pillow==12.1.1
+opencv-python-headless==4.13.0.90
+numpy==2.4.4
+pydantic==2.13.4
+pydantic-settings==2.14.2
+python-multipart==0.0.32
+sqlalchemy==2.0.51
+psycopg2-binary==2.9.12
+slowapi==0.1.10

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScriptGrader — evidence-based answer sheet evaluation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar__inner">
+    <div class="wordmark">
+      <span class="wordmark__mark" aria-hidden="true">§</span>
+      <span class="wordmark__text">ScriptGrader</span>
+    </div>
+    <p class="topbar__tagline">Every mark, explained</p>
+    <div class="auth-bar">
+      <label for="api-key-input" class="auth-bar__label">API key</label>
+      <input type="password" id="api-key-input" class="auth-bar__input" placeholder="X-API-Key" autocomplete="off">
+      <button type="button" class="btn btn--ghost btn--small" id="save-api-key">Save</button>
+      <span class="auth-bar__status" id="auth-status" hidden></span>
+    </div>
+  </div>
+</header>
+
+<main class="layout">
+
+  <!-- ============ INPUT FORM ============ -->
+  <section class="panel panel--form" id="form-panel" aria-labelledby="form-heading">
+    <h1 id="form-heading" class="panel__title">Grade an answer</h1>
+    <p class="panel__subtitle">Upload a scanned or photographed handwritten answer alongside the question, model answer, and rubric.</p>
+
+    <form id="grade-form" novalidate>
+
+      <div class="field">
+        <label for="question-number">Question number</label>
+        <input type="text" id="question-number" name="question_number" placeholder="1a" required>
+      </div>
+
+      <div class="field">
+        <label for="question-text">Question</label>
+        <textarea id="question-text" name="question_text" rows="2" placeholder="Define osmosis and explain the direction of solvent movement." required></textarea>
+      </div>
+
+      <div class="field">
+        <label for="model-answer">Model answer / key points</label>
+        <textarea id="model-answer" name="model_answer" rows="3" placeholder="Osmosis is the movement of solvent molecules across a semi-permeable membrane, from a region of low solute concentration to high solute concentration, until equilibrium is reached." required></textarea>
+      </div>
+
+      <div class="field">
+        <div class="field__header">
+          <label id="rubric-label">Marking rubric</label>
+          <button type="button" class="btn btn--ghost btn--small" id="add-criterion">
+            <span aria-hidden="true">+</span> Add criterion
+          </button>
+        </div>
+        <div id="rubric-rows" role="group" aria-labelledby="rubric-label"></div>
+        <p class="field__hint" id="rubric-total-hint">Total: 0 marks</p>
+      </div>
+
+      <div class="field">
+        <label for="sheet-image">Handwritten answer</label>
+        <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-describedby="dropzone-hint">
+          <input type="file" id="sheet-image" name="sheet_image" accept="image/jpeg,image/png,image/webp" required hidden>
+          <div class="dropzone__content" id="dropzone-content">
+            <span class="dropzone__icon" aria-hidden="true">&#8593;</span>
+            <p class="dropzone__label">Drop an image, or click to browse</p>
+            <p class="dropzone__hint" id="dropzone-hint">JPEG, PNG, or WebP — up to 10 MB</p>
+          </div>
+          <img id="dropzone-preview" class="dropzone__preview" alt="" hidden>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn--primary btn--full" id="submit-btn">
+        Grade answer
+      </button>
+
+      <p class="form-error" id="form-error" role="alert" hidden></p>
+    </form>
+  </section>
+
+  <!-- ============ RESULTS ============ -->
+  <section class="panel panel--results" id="results-panel" aria-labelledby="results-heading" aria-live="polite">
+
+    <div class="empty-state" id="empty-state">
+      <span class="empty-state__mark" aria-hidden="true">§</span>
+      <p>Graded answers will appear here, with every mark tied to the exact line it came from.</p>
+    </div>
+
+    <div class="loading-state" id="loading-state" hidden>
+      <div class="loading-state__spinner" aria-hidden="true"></div>
+      <p id="loading-state__text">Reading the handwriting&hellip;</p>
+    </div>
+
+    <div class="error-state" id="error-state" role="alert" hidden>
+      <p class="error-state__title" id="error-title">Grading failed</p>
+      <p class="error-state__message" id="error-message"></p>
+      <button type="button" class="btn btn--ghost" id="retry-btn">Try again</button>
+    </div>
+
+    <div class="result" id="result" hidden>
+
+      <div class="result__header">
+        <div>
+          <p class="result__eyebrow" id="result-question-number">Question 1</p>
+          <h2 id="results-heading" class="result__grade-label" id="result-grade">A</h2>
+        </div>
+        <div class="score-badge" id="score-badge">
+          <span class="score-badge__value" id="score-value">0/0</span>
+          <span class="score-badge__pct" id="score-pct">0%</span>
+        </div>
+      </div>
+
+      <div class="low-confidence-banner" id="low-confidence-banner" hidden>
+        Handwriting was difficult to read in places — a teacher should verify this grade before it's final.
+      </div>
+
+      <div class="marked-sheet" id="marked-sheet-container" hidden>
+        <h3 class="marked-sheet__title">Marked answer sheet</h3>
+        <p class="marked-sheet__hint">Click a highlighted region, or a ledger row below, to see the connection.</p>
+        <div class="marked-sheet__frame">
+          <img id="marked-sheet-image" alt="Scanned answer sheet">
+          <canvas id="marked-sheet-canvas"></canvas>
+        </div>
+      </div>
+
+      <div class="ledger">
+        <div class="ledger__header">
+          <h3 class="ledger__title">Marking ledger</h3>
+          <button type="button" class="btn btn--ghost btn--small" id="review-toggle" hidden>Override marks</button>
+        </div>
+        <div id="ledger-rows"></div>
+        <div class="review-controls" id="review-controls" hidden>
+          <input type="text" id="review-note-input" placeholder="Note explaining the override (optional)">
+          <button type="button" class="btn btn--primary btn--small" id="save-override">Save override</button>
+        </div>
+        <p class="reviewed-banner" id="reviewed-banner" hidden>Reviewed by a teacher.</p>
+      </div>
+
+      <div class="transcript">
+        <h3 class="transcript__title">What the model read</h3>
+        <p class="transcript__body" id="transcript-body"></p>
+      </div>
+
+      <div class="teacher-note">
+        <p class="teacher-note__label">Feedback</p>
+        <p class="teacher-note__body" id="overall-feedback"></p>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<section class="history" id="history-panel" aria-labelledby="history-heading">
+  <div class="history__inner">
+    <div class="history__header">
+      <h2 id="history-heading" class="history__title">Recent evaluations</h2>
+      <button type="button" class="btn btn--ghost btn--small" id="refresh-history">Refresh</button>
+    </div>
+    <p class="history__hint" id="history-hint">Enter your API key above to load history.</p>
+    <div id="history-rows"></div>
+  </div>
+</section>
+
+<script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-scriptgrader}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-scriptgrader}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-scriptgrader}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    # Not exposed to the host by default — the app reaches it over the
+    # compose network. Uncomment to inspect the DB directly during dev:
+    # ports:
+    #   - "5432:5432"
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      MOCK_GRADING: ${MOCK_GRADING:-false}
+      GRADING_MODEL: ${GRADING_MODEL:-claude-sonnet-4-6}
+      TEACHER_API_KEY: ${TEACHER_API_KEY:?set TEACHER_API_KEY in .env}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:8000}
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-scriptgrader}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-scriptgrader}
+      RATE_LIMIT_GRADE: ${RATE_LIMIT_GRADE:-10/minute}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      WEB_CONCURRENCY: ${WEB_CONCURRENCY:-4}
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+volumes:
+  db_data:
