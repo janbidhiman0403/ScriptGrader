@@ -5,7 +5,7 @@
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Tests](https://img.shields.io/badge/tests-pytest-yellow)
 
-AI-based evaluation of handwritten answer sheets with evidence-backed
+
 rubric scoring. This FastAPI app accepts scanned student answers, grades
 them using a vision-capable model, and returns structured results with a
 clear reason and evidence for every awarded mark.
