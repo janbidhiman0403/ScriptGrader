@@ -5,35 +5,29 @@
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Tests](https://img.shields.io/badge/tests-pytest-yellow)
 
-
 rubric scoring. This FastAPI app accepts scanned student answers, grades
 them using a vision-capable model, and returns structured results with a
 clear reason and evidence for every awarded mark.
 
 ---
 
-## Demo
+## Demo & Screenshots
 
-<!--
-  Add a short GIF here showing: upload a sheet -> grading -> result view.
-  Recommended tool: ScreenToGif (Windows) or Kap (Mac) or peek (Linux).
-  Keep it under ~10s and under 5MB so it loads fast on GitHub.
+### Grading Interface
+![Grade an answer form](docs/screenshot-grading-form.png)
+*Upload handwritten answer sheet with question, model answer, and rubric criteria*
 
-  Save the file as: docs/demo.gif
--->
+### Grading Form with Question Details
+![Grade answer with details](docs/screenshot-grade-details.png)
+*Complete form showing question, model answer, marking rubric, and file upload*
 
-![ScriptGrader demo](docs/demo.gif)
+### Evaluation Results
+![Evaluation results](docs/screenshot-result.png)
+*Graded answers with every mark tied to exact line it came from*
 
-| Upload & Rubric | Evaluation Result |
-|---|---|
-| ![Upload screen](docs/screenshot-upload.png) | ![Result screen](docs/screenshot-result.png) |
-
-<!--
-  Save screenshots as:
-  docs/screenshot-upload.png   -> the form where a teacher uploads a sheet + rubric
-  docs/screenshot-result.png   -> the graded output with per-criterion evidence
-  Suggested size: 1200px wide, PNG, light theme browser window (no bookmarks bar).
--->
+### Recent Evaluations
+![Recent evaluations history](docs/screenshot-recent-evaluations.png)
+*View history of all graded answers with scores and percentages*
 
 ---
 
@@ -73,8 +67,8 @@ from the sheet, not just a number — so a teacher can verify or override it.
 Works the same on Windows, macOS, and Linux — commands differ only where noted.
 
 ```bash
-git clone https://github.com/janbidhiman0403/nit-sheet-evaluation.git
-cd nit-sheet-evaluation
+git clone https://github.com/janbidhiman0403/ScriptGrader.git
+cd ScriptGrader
 
 python -m venv .venv
 ```
@@ -146,7 +140,7 @@ static/
   index.html, styles.css, app.js   frontend UI served directly by FastAPI
 tests/                 pytest coverage for schema, API, and services
 docs/
-  demo.gif, screenshot-*.png       README media (see Demo section)
+  screenshots-*.png    README media showing UI and grading results
 ```
 
 ## Environment configuration
