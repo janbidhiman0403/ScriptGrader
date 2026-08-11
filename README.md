@@ -292,7 +292,7 @@ Tests cover:
 - [ ] Per-user authentication and audit log for overrides
 - [ ] Richer teacher review UI (batch review, diffing regrades)
 - [ ] Export evaluations to CSV/PDF for record-keeping
-- [ ] CI workflow to run tests automatically on push
+- [*] CI workflow to run tests automatically on push
 
 ## Contributing
 

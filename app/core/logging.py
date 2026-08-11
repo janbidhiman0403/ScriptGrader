@@ -6,7 +6,7 @@ import sys
 
 def configure_logging(level: str = "INFO") -> None:
     root = logging.getLogger()
-    root.setLevel(level)
+    root.setLevel(level.upper())
 
     # Avoid duplicate handlers if configure_logging() runs more than once
     # (e.g. under a reloader).
