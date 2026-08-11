@@ -27,5 +27,5 @@ jobs:
       - name: Run tests
         env:
           MOCK_GRADING: "true"
-          TEACHER_API_KEY: "test-key"
+          TEACHER_API_KEY: "test-secret"
         run: pytest tests/ -v
