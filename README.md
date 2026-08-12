@@ -3,7 +3,7 @@
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.110-009688)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Tests](https://img.shields.io/badge/tests-pytest-yellow)
+![Tests](https://github.com/janbidhiman0403/ScriptGrader/actions/workflows/tests.yml/badge.svg)
 
 rubric scoring. This FastAPI app accepts scanned student answers, grades
 them using a vision-capable model, and returns structured results with a
@@ -286,7 +286,7 @@ Tests cover:
 - [ ] Per-user authentication and audit log for overrides
 - [ ] Richer teacher review UI (batch review, diffing regrades)
 - [ ] Export evaluations to CSV/PDF for record-keeping
-- [*] CI workflow to run tests automatically on push
+- [x] CI workflow to run tests automatically on push
 
 ## Contributing
 
