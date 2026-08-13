@@ -213,6 +213,9 @@
 
       row.innerHTML = `
         <td><input type="checkbox" class="dash-row__select" data-id="${escapeHtml(record.id)}" aria-label="Select row"></td>
+        <td class="dash-table__expand-col">
+          <button type="button" class="expand-toggle" aria-expanded="false" aria-label="Show explanation">▸</button>
+        </td>
         <td class="dash-table__question">Q${escapeHtml(record.question_number)}</td>
         <td class="dash-table__score">${roundClean(record.total_awarded)}/${roundClean(record.total_max)} <span class="dash-table__pct">(${scorePct}%)</span></td>
         <td>${escapeHtml(record.grade || "—")}</td>
@@ -236,10 +239,61 @@
         updateBulkBar();
       });
 
+      const detailRow = buildDetailRow(record);
+      const toggle = row.querySelector(".expand-toggle");
+      toggle.addEventListener("click", () => {
+        const isOpen = detailRow.hidden === false;
+        detailRow.hidden = isOpen;
+        toggle.setAttribute("aria-expanded", String(!isOpen));
+        toggle.textContent = isOpen ? "▸" : "▾";
+        row.classList.toggle("dash-row--expanded", !isOpen);
+      });
+
       dashRows.appendChild(row);
+      dashRows.appendChild(detailRow);
     });
 
     updateBulkBar();
+  }
+
+  function buildDetailRow(record) {
+    const tr = document.createElement("tr");
+    tr.className = "dash-detail-row";
+    tr.hidden = true;
+
+    const criteriaHtml = (record.criteria || [])
+      .map((c) => {
+        const ratio = c.max_marks > 0 ? c.awarded / c.max_marks : 0;
+        const kind = ratio >= 0.999 ? "full" : ratio <= 0.001 ? "zero" : "partial";
+        return `
+          <div class="explain-item explain-item--${kind}">
+            <div class="explain-item__head">
+              <span class="explain-item__name">${escapeHtml(c.name)}</span>
+              <span class="explain-item__marks">${roundClean(c.awarded)} / ${roundClean(c.max_marks)}</span>
+            </div>
+            <p class="explain-item__evidence">${escapeHtml(c.evidence)}</p>
+            <p class="explain-item__reason">${escapeHtml(c.reason)}</p>
+          </div>
+        `;
+      })
+      .join("");
+
+    tr.innerHTML = `
+      <td colspan="9">
+        <div class="dash-explain">
+          <div class="dash-explain__criteria">${criteriaHtml}</div>
+          ${
+            record.overall_feedback
+              ? `<div class="dash-explain__overall">
+                   <span class="dash-explain__overall-label">Overall feedback</span>
+                   <p>${escapeHtml(record.overall_feedback)}</p>
+                 </div>`
+              : ""
+          }
+        </div>
+      </td>
+    `;
+    return tr;
   }
 
   selectAllCheckbox.addEventListener("change", () => {
