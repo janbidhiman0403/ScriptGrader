@@ -666,4 +666,10 @@
   initApiKeyField();
   showEmpty();
   loadHistory();
+
+  // Deep link from the review dashboard: index.html?eval=<id>
+  const deepLinkId = new URLSearchParams(window.location.search).get("eval");
+  if (deepLinkId && getApiKey()) {
+    loadEvaluationIntoView(deepLinkId);
+  }
 })();

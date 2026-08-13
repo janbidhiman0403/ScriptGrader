@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Review dashboard — ScriptGrader</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/dashboard.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar__inner">
+    <div class="wordmark">
+      <span class="wordmark__mark" aria-hidden="true">§</span>
+      <span class="wordmark__text">ScriptGrader</span>
+    </div>
+    <p class="topbar__tagline">Review dashboard</p>
+    <nav class="topbar__nav">
+      <a href="/index.html" class="topbar__nav-link">Grade an answer</a>
+    </nav>
+    <div class="auth-bar">
+      <label for="api-key-input" class="auth-bar__label">API key</label>
+      <input type="password" id="api-key-input" class="auth-bar__input" placeholder="X-API-Key" autocomplete="off">
+      <button type="button" class="btn btn--ghost btn--small" id="save-api-key">Save</button>
+      <span class="auth-bar__status" id="auth-status" hidden></span>
+    </div>
+  </div>
+</header>
+
+<main class="dash-layout">
+
+  <!-- ============ SUMMARY STRIP ============ -->
+  <section class="dash-stats" id="dash-stats" aria-label="Queue summary">
+    <div class="stat-card">
+      <span class="stat-card__value" id="stat-total">—</span>
+      <span class="stat-card__label">Total graded</span>
+    </div>
+    <div class="stat-card stat-card--gold">
+      <span class="stat-card__value" id="stat-unreviewed">—</span>
+      <span class="stat-card__label">Awaiting review</span>
+    </div>
+    <div class="stat-card stat-card--red">
+      <span class="stat-card__value" id="stat-lowconf">—</span>
+      <span class="stat-card__label">Low confidence</span>
+    </div>
+    <div class="stat-card stat-card--green">
+      <span class="stat-card__value" id="stat-avg">—</span>
+      <span class="stat-card__label">Average score</span>
+    </div>
+  </section>
+
+  <!-- ============ TOOLBAR ============ -->
+  <section class="dash-toolbar">
+    <div class="dash-filters" role="tablist" aria-label="Filter queue">
+      <button type="button" class="dash-filter is-active" data-filter="all" role="tab" aria-selected="true">All</button>
+      <button type="button" class="dash-filter" data-filter="unreviewed" role="tab" aria-selected="false">Awaiting review</button>
+      <button type="button" class="dash-filter" data-filter="reviewed" role="tab" aria-selected="false">Reviewed</button>
+      <button type="button" class="dash-filter" data-filter="lowconf" role="tab" aria-selected="false">Low confidence</button>
+    </div>
+
+    <div class="dash-toolbar__right">
+      <input type="search" id="dash-search" class="dash-search" placeholder="Filter by question number…" aria-label="Filter by question number">
+      <select id="dash-sort" class="dash-sort" aria-label="Sort order">
+        <option value="date-desc">Newest first</option>
+        <option value="date-asc">Oldest first</option>
+        <option value="score-asc">Lowest score first</option>
+        <option value="score-desc">Highest score first</option>
+      </select>
+      <button type="button" class="btn btn--ghost btn--small" id="dash-refresh">Refresh</button>
+    </div>
+  </section>
+
+  <!-- ============ QUEUE ============ -->
+  <section class="dash-queue-wrap">
+    <div class="dash-hint" id="dash-hint">Enter your API key above to load the review queue.</div>
+
+    <table class="dash-table" id="dash-table" hidden>
+      <thead>
+        <tr>
+          <th scope="col" class="dash-table__select-col">
+            <input type="checkbox" id="select-all" aria-label="Select all visible rows">
+          </th>
+          <th scope="col">Question</th>
+          <th scope="col">Score</th>
+          <th scope="col">Grade</th>
+          <th scope="col">Status</th>
+          <th scope="col">Flags</th>
+          <th scope="col">Graded</th>
+          <th scope="col" class="dash-table__action-col"></th>
+        </tr>
+      </thead>
+      <tbody id="dash-rows"></tbody>
+    </table>
+
+    <div class="dash-empty" id="dash-empty" hidden>No evaluations match this view.</div>
+  </section>
+
+  <!-- ============ BULK BAR ============ -->
+  <div class="bulk-bar" id="bulk-bar" hidden>
+    <span id="bulk-count">0 selected</span>
+    <div class="bulk-bar__actions">
+      <button type="button" class="btn btn--primary btn--small" id="bulk-mark-reviewed">Mark reviewed</button>
+      <button type="button" class="btn btn--ghost btn--small" id="bulk-clear">Clear selection</button>
+    </div>
+  </div>
+
+</main>
+
+<script src="/dashboard.js"></script>
+</body>
+</html>
