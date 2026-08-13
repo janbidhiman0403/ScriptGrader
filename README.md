@@ -45,6 +45,44 @@ Once you add these files, you can embed them in the README like this:
 
 ---
 
+## Screenshots and accessibility
+
+For accessibility and better presentation on GitHub, include concise alt-text and a short caption under each screenshot. Below are recommended embed snippets that use a small thumbnail (480px) linking to the full-size image — this keeps the README compact while allowing viewers to open the full image when needed.
+
+Note: the thumbnail files (`-thumb.png`) will be created by the repository maintainer or by me after you upload the original images. If thumbnails are not present the links will still work but GitHub will show broken images until the files are added.
+
+Example embeds (copy/paste into the README):
+
+[![Review dashboard — summary metrics and recently graded answers awaiting review](docs/handwritten-1-thumb.png)](docs/handwritten-1.png)
+
+_Review dashboard — summary metrics and recently graded answers awaiting review._
+
+[![Grading form — question, model answer, rubric and file upload area](docs/handwritten-2-thumb.png)](docs/handwritten-2.png)
+
+_Grading form with question details and rubric items._
+
+[![Full grading interface — upload area and recent evaluations list](docs/handwritten-3-thumb.png)](docs/handwritten-3.png)
+
+_Full grading interface showing upload area and recent evaluations._
+
+[![Rubric close-up — criterion names and marks](docs/handwritten-4-thumb.png)](docs/handwritten-4.png)
+
+_Close-up of rubric items and assigned marks._
+
+
+### Recommended alt-text (copy/paste)
+- Review dashboard: "ScriptGrader review dashboard showing four metric cards (Total graded, Awaiting review, Low confidence, Average score) and a table of graded answers with question IDs, scores, grades, status, timestamps, and a 'Review' action."
+- Grading form: "Grade an answer form showing fields for question number, question text, model answer, rubric items with marks, and an upload area for handwritten answers."
+- Full interface: "Full grading UI showing the upload area, grading form and a Recent evaluations panel listing previously graded answers."
+- Rubric close-up: "Close-up of rubric items with criterion names and maximum marks alongside input fields for awarded marks."
+
+
+### What I changed here
+- Added an explicit "Screenshots and accessibility" section with recommended thumbnail + full-size embedding patterns, alt-text, and captions.
+- Added guidance on filenames and next steps to add images to `docs/`.
+
+---
+
 ## How it works
 
 ```
