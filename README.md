@@ -29,6 +29,20 @@ clear reason and evidence for every awarded mark.
 ![Recent evaluations history](docs/screenshot-recent-evaluations.png)
 *View history of all graded answers with scores and percentages*
 
+### Handwritten example (add your images to docs/)
+Below are four example images you can add to the `docs/` directory to demonstrate real handwritten input and UI states. Place the files in `docs/` with the exact filenames shown and they will render in this README.
+
+- `docs/handwritten-1.png` — a photographed handwritten answer (crop or rotate as needed)
+- `docs/handwritten-2.png` — grading form screenshot showing the question and rubric filled
+- `docs/handwritten-3.png` — full-page grading interface with upload area and recent evaluations
+- `docs/handwritten-4.png` — close-up of rubric items and the uploaded image preview
+
+Once you add these files, you can embed them in the README like this:
+
+```
+![Handwritten sample](docs/handwritten-1.png)
+```
+
 ---
 
 ## How it works
@@ -136,8 +150,8 @@ app/
     prompt.py          prompt templates used by the grading engine
     engine.py          two-pass grading orchestration
     persistence.py     save/load/override evaluation records
-static/
-  index.html, styles.css, app.js   frontend UI served directly by FastAPI
+  static/
+    index.html, styles.css, app.js   frontend UI served directly by FastAPI
 tests/                 pytest coverage for schema, API, and services
 docs/
   screenshots-*.png    README media showing UI and grading results
