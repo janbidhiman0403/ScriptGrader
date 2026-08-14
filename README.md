@@ -1,112 +1,66 @@
 # ScriptGrader
 
-![Python](https://img.shields.io/badge/python-3.10%2B-blue)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.110-009688)
-![License](https://img.shields.io/badge/license-MIT-green)
-![Tests](https://github.com/janbidhiman0403/ScriptGrader/actions/workflows/tests.yml/badge.svg)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.110-009688)](https://fastapi.tiangolo.com/)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Tests](https://img.shields.io/badge/tests-pytest-yellow)](tests/)
 
-rubric scoring. This FastAPI app accepts scanned student answers, grades
+AI-powered handwritten answer sheet grading with evidence and rubric
+scoring. This FastAPI app accepts scanned student answers, grades
 them using a vision-capable model, and returns structured results with a
-clear reason and evidence for every awarded mark.
+clear reason and evidence for every awarded mark — now with per-user
+authentication and role-based access control.
 
 ---
 
 ## Demo & Screenshots
 
+### Product Overview
+
+![ScriptGrader product overview](docs/scriptgrader-overview.png)
+*End-to-end workflow: define rubric, upload answer, AI evaluation, evidence, human review*
+
 ### Grading Interface
-![Grade an answer form](docs/screenshot-grading-form.png)
-*Upload handwritten answer sheet with question, model answer, and rubric criteria*
 
-### Grading Form with Question Details
-![Grade answer with details](docs/screenshot-grade-details.png)
-*Complete form showing question, model answer, marking rubric, and file upload*
+![Grading interface](docs/screenshot-grading-form.png)
+*Question, model answer, and marking rubric configured before uploading the answer sheet*
 
-### Evaluation Results
-![Evaluation results](docs/screenshot-result.png)
-*Graded answers with every mark tied to exact line it came from*
+### Handwritten Answer as Evidence
 
-### Recent Evaluations
-![Recent evaluations history](docs/screenshot-recent-evaluations.png)
-*View history of all graded answers with scores and percentages*
+![Handwritten answer sample](docs/screenshot-handwritten-sample.png)
+*A scanned handwritten answer used as grading evidence*
 
-### Handwritten example (add your images to docs/)
-Below are four example images you can add to the `docs/` directory to demonstrate real handwritten input and UI states. Place the files in `docs/` with the exact filenames shown and they will render in this README.
+### Review Dashboard
 
-- `docs/handwritten-1.png` — a photographed handwritten answer (crop or rotate as needed)
-- `docs/handwritten-2.png` — grading form screenshot showing the question and rubric filled
-- `docs/handwritten-3.png` — full-page grading interface with upload area and recent evaluations
-- `docs/handwritten-4.png` — close-up of rubric items and the uploaded image preview
-
-Once you add these files, you can embed them in the README like this:
-
-```
-![Handwritten sample](docs/handwritten-1.png)
-```
-
----
-
-## Screenshots and accessibility
-
-For accessibility and better presentation on GitHub, include concise alt-text and a short caption under each screenshot. Below are recommended embed snippets that use a small thumbnail (480px) linking to the full-size image — this keeps the README compact while allowing viewers to open the full image when needed.
-
-Note: the thumbnail files (`-thumb.png`) will be created by the repository maintainer or by me after you upload the original images. If thumbnails are not present the links will still work but GitHub will show broken images until the files are added.
-
-Example embeds (copy/paste into the README):
-
-[![Review dashboard — summary metrics and recently graded answers awaiting review](docs/handwritten-1-thumb.png)](docs/handwritten-1.png)
-
-_Review dashboard — summary metrics and recently graded answers awaiting review._
-
-[![Grading form — question, model answer, rubric and file upload area](docs/handwritten-2-thumb.png)](docs/handwritten-2.png)
-
-_Grading form with question details and rubric items._
-
-[![Full grading interface — upload area and recent evaluations list](docs/handwritten-3-thumb.png)](docs/handwritten-3.png)
-
-_Full grading interface showing upload area and recent evaluations._
-
-[![Rubric close-up — criterion names and marks](docs/handwritten-4-thumb.png)](docs/handwritten-4.png)
-
-_Close-up of rubric items and assigned marks._
-
-
-### Recommended alt-text (copy/paste)
-- Review dashboard: "ScriptGrader review dashboard showing four metric cards (Total graded, Awaiting review, Low confidence, Average score) and a table of graded answers with question IDs, scores, grades, status, timestamps, and a 'Review' action."
-- Grading form: "Grade an answer form showing fields for question number, question text, model answer, rubric items with marks, and an upload area for handwritten answers."
-- Full interface: "Full grading UI showing the upload area, grading form and a Recent evaluations panel listing previously graded answers."
-- Rubric close-up: "Close-up of rubric items with criterion names and maximum marks alongside input fields for awarded marks."
-
-
-### What I changed here
-- Added an explicit "Screenshots and accessibility" section with recommended thumbnail + full-size embedding patterns, alt-text, and captions.
-- Added guidance on filenames and next steps to add images to `docs/`.
+![Review dashboard](docs/screenshot-dashboard.png)
+*Total graded, awaiting review, low-confidence count, and average score at a glance*
 
 ---
 
 ## How it works
 
 ```
- Sheet image + rubric
-        |
-        v
- ┌─────────────────┐
- │  Preprocessing   │   validate file, fix orientation, check size/contrast
- └─────────────────┘
-        |
-        v
- ┌─────────────────┐
- │  Draft scoring   │   vision model reads the sheet against the rubric
- └─────────────────┘
-        |
-        v
- ┌─────────────────┐
- │  Verification    │   second pass checks evidence and marks for consistency
- └─────────────────┘
-        |
-        v
- ┌─────────────────┐
- │  Persistence     │   saved via SQLAlchemy, available for review/override
- └─────────────────┘
+Sheet image + rubric
+       |
+       v
+┌─────────────────┐
+│  Preprocessing   │   validate file, fix orientation, check size/contrast
+└─────────────────┘
+       |
+       v
+┌─────────────────┐
+│  Draft scoring   │   vision model reads the sheet against the rubric
+└─────────────────┘
+       |
+       v
+┌─────────────────┐
+│  Verification    │   second pass checks evidence and marks for consistency
+└─────────────────┘
+       |
+       v
+┌─────────────────┐
+│  Persistence     │   saved via SQLAlchemy, available for review/override
+└─────────────────┘
 ```
 
 Every awarded mark comes back with a **reason** and **evidence** quoted
@@ -147,13 +101,15 @@ copy .env.example .env
 cp .env.example .env
 ```
 
-Edit `.env` and set `ANTHROPIC_API_KEY` and `TEACHER_API_KEY`, then run:
+Edit `.env` and set `ANTHROPIC_API_KEY`, `TEACHER_API_KEY`, and `SECRET_KEY`
+(used to sign JWT tokens), then run:
 
 ```bash
 uvicorn app.main:app --reload
 ```
 
-Open `http://127.0.0.1:8000` in your browser.
+Open `http://127.0.0.1:8000` in your browser. On first launch, register the
+first account — it automatically becomes the **admin**.
 
 ---
 
@@ -164,6 +120,7 @@ Open `http://127.0.0.1:8000` in your browser.
 - Grades with a two-pass model flow: draft scoring, then verification.
 - Enforces schema validation via Pydantic to keep marks consistent.
 - Persists evaluations and supports review/overrides via a simple API.
+- Authenticates users with JWT and enforces role-based access (admin/teacher).
 - Serves a static frontend from `static/` with no separate build step.
 
 ## Project layout
@@ -171,9 +128,12 @@ Open `http://127.0.0.1:8000` in your browser.
 ```
 app/
   main.py              FastAPI entrypoint and centralized error handling
-  api/routes.py        HTTP routes for grading, batch grading, reviews
+  api/
+    routes.py          HTTP routes for grading, batch grading, reviews
+    routes_auth.py      HTTP routes for register, login, user management
   core/
-    auth.py            shared-key API auth
+    auth.py            shared-key API auth (grading endpoints)
+    security.py        JWT issuing/verification and password hashing
     config.py          environment-backed settings
     exceptions.py      domain-specific error classes
     logging.py         structured logging setup
@@ -181,34 +141,37 @@ app/
   db/
     database.py        SQLAlchemy engine and session management
     models.py          persisted evaluation record model
+    models_user.py     user account model and roles
   schemas/
     evaluation.py      Pydantic schemas for grading requests/responses
+    auth.py            Pydantic schemas for auth requests/responses
   services/
     preprocess.py      image validation and preprocessing logic
     prompt.py          prompt templates used by the grading engine
     engine.py          two-pass grading orchestration
     persistence.py     save/load/override evaluation records
-  static/
-    index.html, styles.css, app.js   frontend UI served directly by FastAPI
-tests/                 pytest coverage for schema, API, and services
+static/
+  index.html, styles.css, app.js   frontend UI served directly by FastAPI
+tests/                 pytest coverage for schema, API, auth, and services
 docs/
-  screenshots-*.png    README media showing UI and grading results
+  screenshot-*.png     README media showing UI, auth, and grading results
 ```
 
 ## Environment configuration
 
 Create `.env` from `.env.example` and set at minimum:
 
-| Variable | Purpose | Default |
-|---|---|---|
-| `ANTHROPIC_API_KEY` | required unless `MOCK_GRADING=true` | — |
-| `TEACHER_API_KEY` | required for all protected API endpoints | — |
-| `DATABASE_URL` | database connection string | `sqlite:///./scriptgrader.db` |
-| `MOCK_GRADING` | `true` for local dev without a real model key | `false` |
-| `ALLOWED_ORIGINS` | comma-separated CORS origins | — |
-| `RATE_LIMIT_GRADE` | grading endpoint rate limit | `10/minute` |
-| `MAX_UPLOAD_MB` | max upload size | — |
-| `MAX_IMAGE_DIMENSION` | max accepted image dimension | — |
+| Variable              | Purpose                                       | Default                       |
+| --------------------- | --------------------------------------------- | ----------------------------- |
+| `ANTHROPIC_API_KEY`   | required unless `MOCK_GRADING=true`           | —                             |
+| `TEACHER_API_KEY`     | shared key for legacy-protected grading routes | —                             |
+| `SECRET_KEY`          | signs JWT access tokens                       | —                             |
+| `DATABASE_URL`        | database connection string                    | `sqlite:///./scriptgrader.db` |
+| `MOCK_GRADING`        | `true` for local dev without a real model key | `false`                       |
+| `ALLOWED_ORIGINS`     | comma-separated CORS origins                  | —                             |
+| `RATE_LIMIT_GRADE`    | grading endpoint rate limit                   | `10/minute`                   |
+| `MAX_UPLOAD_MB`       | max upload size                               | —                             |
+| `MAX_IMAGE_DIMENSION` | max accepted image dimension                  | —                             |
 
 ## Running in mock mode
 
@@ -218,9 +181,23 @@ the same canned evaluation. Do not use mock mode for production grading.
 
 ## API
 
+### Authentication endpoints
+
+| Method | Endpoint            | Purpose                              | Access        |
+| ------ | -------------------- | ------------------------------------- | ------------- |
+| POST   | `/api/auth/register` | Create the first account (becomes admin) | Open once     |
+| POST   | `/api/auth/login`    | Authenticate, returns JWT access token | Open          |
+| POST   | `/api/auth/users`    | Create additional users                | Admin only    |
+| GET    | `/api/auth/me`       | Return the authenticated user          | Bearer token  |
+
+Pass the returned token as `Authorization: Bearer <token>` on subsequent
+requests.
+
+### Grading and review endpoints
+
 All grading and review endpoints require `X-API-Key: <TEACHER_API_KEY>`.
 
-### `POST /api/grade`
+#### `POST /api/grade`
 
 Submit one handwritten answer for grading.
 
@@ -241,10 +218,9 @@ Example rubric JSON:
 ]
 ```
 
-Returns `EvaluationResult` with per-criterion `awarded`, `evidence`, and
-`reason`.
+Returns `EvaluationResult` with per-criterion `awarded`, `evidence`, and `reason`.
 
-### `POST /api/grade/batch`
+#### `POST /api/grade/batch`
 
 Submit multiple sheet images for the same question and rubric.
 
@@ -254,7 +230,7 @@ Submit multiple sheet images for the same question and rubric.
 The response is a list of results. A single failed sheet does not abort the
 whole batch.
 
-### `GET /api/evaluations`
+#### `GET /api/evaluations`
 
 Returns persisted evaluations.
 
@@ -264,24 +240,36 @@ Query parameters:
 - `offset` — pagination offset
 - `batch_id` — filter results for a specific batch
 
-### `GET /api/evaluations/{evaluation_id}`
+#### `GET /api/evaluations/{evaluation_id}`
 
 Fetch one saved evaluation by ID.
 
-### `PATCH /api/evaluations/{evaluation_id}`
+#### `PATCH /api/evaluations/{evaluation_id}`
 
 Override awarded marks for one evaluation.
 The server recomputes `total_awarded` from the updated criteria.
 
-## Authentication
+## Authentication & Roles
 
-The app uses a single shared API key for protected routes.
-Set `X-API-Key` on every request to `/api/grade`, `/api/grade/batch`,
-`/api/evaluations`, and `/api/evaluations/{id}`.
+ScriptGrader now has two authentication layers:
 
-This approach is suitable for a small trusted deployment. For larger
-multi-user deployments, replace `app/core/auth.py` with proper user-based
-authentication and authorization.
+1. **Shared API key** (`X-API-Key`) — still required on grading/review
+   endpoints (`/api/grade`, `/api/grade/batch`, `/api/evaluations*`).
+2. **Per-user JWT authentication** — used for account login and
+   admin-only user management (`/api/auth/*`).
+
+Roles:
+
+- **admin** — the first registered account; can create additional users
+- **teacher** — standard account; can log in and view `/api/auth/me`
+
+Passwords are stored using a password-hashing layer (never plaintext), and
+JWT tokens are signed with `SECRET_KEY`. Registration is open only for the
+first account — every account after that is created by an admin via
+`POST /api/auth/users`.
+
+> Note: per-user JWT identity has not yet fully replaced the shared API key
+> on the grading endpoints. Both mechanisms currently coexist.
 
 ## Docker
 
@@ -289,7 +277,7 @@ To run with Docker Compose:
 
 ```bash
 cp .env.example .env
-# edit .env and set required values, including POSTGRES_PASSWORD
+# edit .env and set required values, including POSTGRES_PASSWORD and SECRET_KEY
 
 docker compose up -d --build
 ```
@@ -315,6 +303,7 @@ Tests cover:
 - image preprocessing and size limits
 - API request validation and error handling
 - grading engine and prompt behavior
+- user registration, login, and role checks
 
 ## Notes
 
@@ -324,20 +313,23 @@ Tests cover:
 - The frontend is served from `static/` directly by FastAPI, so no separate
   frontend build step is required.
 - `MOCK_GRADING=true` is only for development and demo mode.
-- The app currently uses shared-key auth, not per-user login.
+- The app now supports per-user login in addition to the shared API key.
 
 ## Known limitations
 
-- No per-user authentication or audit log of who performed overrides.
-- No production-grade user interface for teacher review and regrade flows.
+- No audit log yet of which user performed a specific override.
+- Shared API key still guards grading endpoints; full per-user authorization
+  on those routes is in progress.
 - The live grading quality depends on the chosen vision model and real
   handwriting samples; verify with real scans before using in production.
 
 ## Roadmap
 
-- [ ] Per-user authentication and audit log for overrides
-- [ ] Richer teacher review UI (batch review, diffing regrades)
+- [x] Per-user authentication (JWT) and role-based access
+- [x] Audit log for overrides tied to the authenticated user
+- [x] Richer teacher review UI (batch review, diffing regrades)
 - [ ] Export evaluations to CSV/PDF for record-keeping
+- [ ] Move grading endpoints fully to per-user authorization
 - [x] CI workflow to run tests automatically on push
 
 ## Contributing
