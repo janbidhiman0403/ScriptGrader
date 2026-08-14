@@ -17,7 +17,7 @@ authentication and role-based access control.
 
 ### Product Overview
 
-![ScriptGrader product overview](docs/scriptgrader-overview.png)
+![ScriptGrader product overview] (docs/overview.png)
 *End-to-end workflow: define rubric, upload answer, AI evaluation, evidence, human review*
 
 ### Grading Interface
