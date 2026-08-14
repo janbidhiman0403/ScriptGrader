@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import enum
 import uuid
 from datetime import datetime, timezone
 
@@ -17,6 +18,28 @@ def _uuid() -> str:
 
 def _now() -> datetime:
     return datetime.now(timezone.utc)
+
+
+class UserRole(str, enum.Enum):
+    admin = "admin"
+    teacher = "teacher"
+
+
+class User(Base):
+    """A per-user login account. Distinct from the shared TEACHER_API_KEY —
+    this table exists so evaluations can eventually be attributed to the
+    specific person who graded or overrode them, rather than just "someone
+    with the key." The first account ever registered becomes admin; every
+    account after that must be created by an admin (see routes_auth.py)."""
+
+    __tablename__ = "users"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
+    username: Mapped[str] = mapped_column(String(64), unique=True, index=True)
+    hashed_password: Mapped[str] = mapped_column(String(128))
+    role: Mapped[str] = mapped_column(String(16), default=UserRole.teacher.value)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_now)
 
 
 class EvaluationRecord(Base):

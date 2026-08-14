@@ -1,18 +1,11 @@
-# Environments
-.venv/
-venv/
-env/
+# Environment
 .env
 
 # Python
+.venv/
 __pycache__/
-*.pyc
-*.pyo
-*.egg-info/
-build/
-dist/
+*.py[cod]
 .pytest_cache/
-.mypy_cache/
 
 # Database
 *.db

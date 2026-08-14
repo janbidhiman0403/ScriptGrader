@@ -63,6 +63,18 @@ class Settings(BaseSettings):
         "internet with many independent users.",
     )
 
+    secret_key: str = Field(
+        default="dev-only-change-this-secret-key",
+        description="Signs JWT access tokens issued by /api/auth/login. "
+        "The default is fine for local development only — set a long "
+        "random SECRET_KEY in .env before deploying anywhere real.",
+    )
+    algorithm: str = Field(default="HS256")
+    access_token_expire_minutes: int = Field(
+        default=60 * 24,
+        description="JWT session lifetime in minutes. Default is 24 hours.",
+    )
+
     allowed_origins_raw: str = Field(
         default="http://localhost:8000",
         alias="ALLOWED_ORIGINS",

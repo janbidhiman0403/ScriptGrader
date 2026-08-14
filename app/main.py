@@ -15,6 +15,7 @@ from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 
 from app.api.routes import router
+from app.api.routes_auth import router as auth_router
 from app.core.config import get_settings
 from app.core.exceptions import (
     GradingModelError,
@@ -56,10 +57,11 @@ app.add_middleware(
     allow_origins=settings.allowed_origins,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PATCH"],
-    allow_headers=["X-API-Key", "Content-Type"],
+    allow_headers=["X-API-Key", "Authorization", "Content-Type"],
 )
 
 app.include_router(router)
+app.include_router(auth_router, prefix="/api/auth", tags=["auth"])
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
 
