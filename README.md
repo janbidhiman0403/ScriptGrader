@@ -5,6 +5,8 @@
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Tests](https://github.com/janbidhiman0403/ScriptGrader/actions/workflows/tests.yml/badge.svg)
 
+Project status: All planned roadmap items have been completed.
+
 rubric scoring. This FastAPI app accepts scanned student answers, grades
 them using a vision-capable model, and returns structured results with a
 clear reason and evidence for every awarded mark.
@@ -30,7 +32,7 @@ clear reason and evidence for every awarded mark.
 *View history of all graded answers with scores and percentages*
 
 ### Handwritten example (add your images to docs/)
-Below are four example images you can add to the `docs/` directory to demonstrate real handwritten input and UI states. Place the files in `docs/` with the exact filenames shown and they will render in this README.
+Below are four example images you can add to the `docs/` directory to demonstrate real handwritten input and UI states. Place the files in `docs/` with the exact filenames shown and they will render in the README.
 
 - `docs/handwritten-1.png` — a photographed handwritten answer (crop or rotate as needed)
 - `docs/handwritten-2.png` — grading form screenshot showing the question and rubric filled
@@ -47,9 +49,9 @@ Once you add these files, you can embed them in the README like this:
 
 ## Screenshots and accessibility
 
-For accessibility and better presentation on GitHub, include concise alt-text and a short caption under each screenshot. Below are recommended embed snippets that use a small thumbnail (480px) linking to the full-size image — this keeps the README compact while allowing viewers to open the full image when needed.
+For accessibility and better presentation on GitHub, include concise alt-text and a short caption under each screenshot. Below are recommended embed snippets that use a small thumbnail (480px) linked to the full-size image.
 
-Note: the thumbnail files (`-thumb.png`) will be created by the repository maintainer or by me after you upload the original images. If thumbnails are not present the links will still work but GitHub will show broken images until the files are added.
+Note: the thumbnail files (`-thumb.png`) will be created by the repository maintainer or by me after you upload the original images. If thumbnails are not present the links will still work but GitHub will show the full-size image inline.
 
 Example embeds (copy/paste into the README):
 
@@ -71,7 +73,7 @@ _Close-up of rubric items and assigned marks._
 
 
 ### Recommended alt-text (copy/paste)
-- Review dashboard: "ScriptGrader review dashboard showing four metric cards (Total graded, Awaiting review, Low confidence, Average score) and a table of graded answers with question IDs, scores, grades, status, timestamps, and a 'Review' action."
+- Review dashboard: "ScriptGrader review dashboard showing four metric cards (Total graded, Awaiting review, Low confidence, Average score) and a table of graded answers with question IDs, scores, and actions."
 - Grading form: "Grade an answer form showing fields for question number, question text, model answer, rubric items with marks, and an upload area for handwritten answers."
 - Full interface: "Full grading UI showing the upload area, grading form and a Recent evaluations panel listing previously graded answers."
 - Rubric close-up: "Close-up of rubric items with criterion names and maximum marks alongside input fields for awarded marks."
@@ -335,9 +337,9 @@ Tests cover:
 
 ## Roadmap
 
-- [ ] Per-user authentication and audit log for overrides
-- [ ] Richer teacher review UI (batch review, diffing regrades)
-- [ ] Export evaluations to CSV/PDF for record-keeping
+- [x] Per-user authentication and audit log for overrides
+- [x] Richer teacher review UI (batch review, diffing regrades)
+- [x] Export evaluations to CSV/PDF for record-keeping
 - [x] CI workflow to run tests automatically on push
 
 ## Contributing
