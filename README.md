@@ -317,7 +317,9 @@ Tests cover:
 
 ## Known limitations
 
-- No audit log yet of which user performed a specific override.
+- No per-account attribution yet of who performed a specific grade or
+  override — `EvaluationRecord` has no `user_id` field, so while the JWT
+  login system exists, it isn't yet linked to individual evaluations.
 - Shared API key still guards grading endpoints; full per-user authorization
   on those routes is in progress.
 - The live grading quality depends on the chosen vision model and real
@@ -326,7 +328,7 @@ Tests cover:
 ## Roadmap
 
 - [x] Per-user authentication (JWT) and role-based access
-- [x] Audit log for overrides tied to the authenticated user
+- [ ] Audit log for overrides tied to the authenticated user
 - [x] Richer teacher review UI (batch review, diffing regrades)
 - [ ] Export evaluations to CSV/PDF for record-keeping
 - [ ] Move grading endpoints fully to per-user authorization
